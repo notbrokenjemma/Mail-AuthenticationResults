@@ -184,6 +184,8 @@ sub tokenise {
         $header = $token->remainder();
         # Do not retain a copy of the remaining header in every token,
         # doing so uses memory quadratic in the number of tokens.
+        # remainder() will return undef for these tokens, this is
+        # documented in Mail::AuthenticationResults::Token.
         delete $token->{ 'header' };
         push @tokenised, $token;
     }

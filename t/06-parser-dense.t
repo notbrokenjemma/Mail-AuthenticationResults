@@ -45,5 +45,6 @@ foreach my $token ( @$tokens ) {
     $retained += length $token->{ 'header' } if defined $token->{ 'header' };
 }
 is( $retained, 0, 'Tokens do not retain the remaining header' );
+is( $tokens->[0]->remainder(), undef, 'Parser created tokens return undef for remainder' );
 
 done_testing();
