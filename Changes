@@ -1,6 +1,8 @@
 Change log for Mail::AuthenticationResults
 
 {{$NEXT}}
+
+2.20261029 2026-10-29 12:20:51+11:00 Australia/Melbourne
   - Fix excessive memory and CPU use when parsing a header
     containing a large number of assertions. Tokens no longer
     retain a copy of the remaining header, and string, quoted
