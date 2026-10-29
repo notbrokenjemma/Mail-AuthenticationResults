@@ -43,21 +43,16 @@ sub parse {
         $is_first = 1;
     }
 
-    while ( length $header > 0 ) {
-        my $first = substr( $header,0,1 );
-        last if $first =~ /\s/;
-        last if $first eq ';';
-        last if $first eq '"' && ! $is_value && ! $is_first;
-        last if $first eq '(' && ! $is_value && ! $is_first;
-        last if $first eq '=' && ! $is_value && ! $is_first;
-        last if $first eq '/' && ! $is_value && ! $is_first;
-        last if $first eq '.' && ! $is_value && ! $is_first;
-
-        $value .= $first;
-        $header   = substr( $header,1 );
+    if ( $is_value || $is_first ) {
+        $value = $1 if $header =~ /^([^\s;]+)/;
+    }
+    else {
+        $value = $1 if $header =~ /^([^\s;"(=\/.]+)/;
     }
 
     croak 'Not a string' if $value eq q{};
+
+    $header = substr( $header, length $value );
 
     $self->{ 'value' } = $value;
     $self->{ 'header' } = $header;

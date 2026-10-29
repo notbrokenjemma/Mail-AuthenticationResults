@@ -27,21 +27,13 @@ sub parse {
     my $value = q{};
 
     my $first = substr( $header,0,1 );
-    $header   = substr( $header,1 );
     croak 'not a quoted string' if $first ne '"';
 
-    my $closed = 0;
-    while ( length $header > 0 ) {
-        my $first = substr( $header,0,1 );
-        $header   = substr( $header,1 );
-        if ( $first eq '"' ) {
-            $closed = 1;
-            last;
-        }
-        $value .= $first;
-    }
+    my $end = index( $header, '"', 1 );
+    croak 'Quoted string not closed' if $end == -1;
 
-    croak 'Quoted string not closed' if ! $closed;
+    $value  = substr( $header, 1, $end - 1 );
+    $header = substr( $header, $end + 1 );
 
     $self->{ 'value' } = $value;
     $self->{ 'header' } = $header;

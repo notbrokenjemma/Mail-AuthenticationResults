@@ -32,16 +32,17 @@ sub parse {
         croak 'Not a comment';
     }
 
-    while ( length $header > 0 ) {
-        my $first = substr( $header,0,1 );
-        $header   = substr( $header,1 );
-        $value .= $first;
-        if ( $first eq '(' ) {
+    my $end;
+    while ( $header =~ /([()])/g ) {
+        if ( $1 eq '(' ) {
             $depth++;
         }
-        elsif ( $first eq ')' ) {
+        else {
             $depth--;
-            last if $depth == 0;
+            if ( $depth == 0 ) {
+                $end = pos( $header );
+                last;
+            }
         }
     }
 
@@ -49,8 +50,8 @@ sub parse {
         croak 'Mismatched parens in comment';
     }
 
-    $value =~ s/^\(//;
-    $value =~ s/\)$//;
+    $value  = substr( $header, 1, $end - 2 );
+    $header = substr( $header, $end );
 
     $self->{ 'value' } = $value;
     $self->{ 'header' } = $header;

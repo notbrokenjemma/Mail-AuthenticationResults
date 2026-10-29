@@ -67,6 +67,11 @@ sub value {
 
 Return the remainder of the header string after parsing the current token out.
 
+Tokens created by L<Mail::AuthenticationResults::Parser> do not retain the
+remainder once it has been consumed, and will return undef. Retaining a copy
+of the remaining header in every token uses memory quadratic in the number
+of tokens.
+
 =cut
 
 sub remainder {
